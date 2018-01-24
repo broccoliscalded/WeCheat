@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">微信</string>
+    <string name="toolbar_title">朋友圈</string>
+    <string name="string_camera">拍摄</string>
+    <string name="string_camera_specification">照片或视频</string>
+    <string name="string_select_from_album">从相册选择</string>
+    <string name="string_nickname">昵称</string>
+    <string name="string_noshow">~</string>
+    <string name="string_confirm">确认</string>
+</resources>

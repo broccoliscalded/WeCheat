@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg_white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/take_photo_choose_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="12dp">
+
+        <TextView
+            android:id="@+id/textView_take_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_camera"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView_pick_pictures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:text="@string/string_camera_specification"
+            android:textColor="@color/colorTextGray"
+            android:textSize="12sp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/colorTextGray"></View>
+
+    <TextView
+        android:id="@+id/textView_select_from_sdcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="2dp"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="12dp"
+        android:text="@string/string_select_from_album"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+</LinearLayout>
