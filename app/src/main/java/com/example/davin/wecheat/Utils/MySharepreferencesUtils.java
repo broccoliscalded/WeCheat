@@ -13,6 +13,9 @@ public class MySharepreferencesUtils {
     private static final String FILL_NAME = "OneMoreInformation";
     private static final String PRIVATE_NICK_NAME = "private_user_nick_name";
     private static final String USER_HEAD_URI = "mini_user_headpic_path";
+    private static final String USER_HEAD_BG_PATH = "user_head_bg_path";
+
+
 
     public static MySharepreferencesUtils mySharepreferencesUtils;
 
@@ -58,5 +61,15 @@ public class MySharepreferencesUtils {
         String uri = msharedPreferences.getString(USER_HEAD_URI,"");
         Log.d("album","uri get " + uri);
         return uri;
+    }
+
+    public void setUserHeadBgPath(String path){
+        meditor.putString(USER_HEAD_BG_PATH,path);
+        meditor.apply();
+    }
+
+    public String getUserHeadBgPath(){
+        String path = msharedPreferences.getString(USER_HEAD_BG_PATH,"");
+        return path;
     }
 }

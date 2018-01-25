@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         AddShortCut.createShortCut(this,R.mipmap.ic_launcher,R.string.app_name);
 
         initToolBar();
@@ -90,24 +91,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         headerBackground = (ImageView) view.findViewById(R.id.imageView_header_background);
         headerUserHeadpic = (ImageView) view.findViewById(R.id.image_change_head_and_nickname);
         headerUserNickname = (TextView) view.findViewById(R.id.textView_nickname);
-        headerUserNickname.setText(MySharepreferencesUtils.with(this).getUserName().toString());
+//        headerUserNickname.setText(MySharepreferencesUtils.with(this).getUserName().toString());
         headerUserHeadpic.setOnClickListener(this);
 
-
+//        Picasso.with(this).load("http://acloud.avori.cn:8088/project_img/tbapi/MemberImg" +
+//                "/2018-01-17/c88c7fcf-8174-4852-969e-f55db4fa7d83_1516187479972_upload.jpg")
+//                .into(headerUserHeadpic);
         mAdapter.setMheaderView(view);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Bitmap bitmap = BitmapFactory.decodeFile(MySharepreferencesUtils.with(this).getUserHeadPicUri()
-        ,new BitmapFactory.Options());
-        /*Picasso.with(this).load("http://img0.imgtn.bdimg.com/it/u=4136048700,1214199505&fm=214&gp=0.jpg")
-//                .resize(TranslationTools.dip2px(this,80),
-//                        TranslationTools.dip2px(this,80))
-//                .centerCrop()
-                .into(headerUserHeadpic);*/
-        headerUserHeadpic.setImageBitmap(bitmap);
+        String header_user_headpic = MySharepreferencesUtils.with(this).getUserHeadPicUri();
+        if (header_user_headpic.length() > 2){
+            Bitmap bitmap = BitmapFactory.decodeFile(header_user_headpic,
+                    new BitmapFactory.Options());
+            headerUserHeadpic.setImageBitmap(bitmap);
+        }
+        String header_user_headbg = MySharepreferencesUtils.with(this).getUserHeadBgPath();
+        if (header_user_headbg.length()> 2){
+            Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
+            headerBackground.setImageBitmap(bitmapBg);
+        }
+
+        headerUserNickname.setText(MySharepreferencesUtils.with(this).getUserName().toString());
     }
 
     private void initToolBar() {
