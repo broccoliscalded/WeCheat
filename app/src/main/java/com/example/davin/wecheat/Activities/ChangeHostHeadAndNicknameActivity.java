@@ -1,4 +1,4 @@
-package com.example.davin.wecheat;
+package com.example.davin.wecheat.Activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -26,12 +26,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.davin.wecheat.MyBeans.MyMoment;
+import com.example.davin.wecheat.R;
 import com.example.davin.wecheat.Utils.MyLog;
 import com.example.davin.wecheat.Utils.MySharepreferencesUtils;
 import com.example.davin.wecheat.Utils.TranslationTools;
 import com.squareup.picasso.Picasso;
 
+import org.litepal.tablemanager.Connector;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,6 +64,8 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
+
+
     }
 
     @Override
@@ -86,16 +94,12 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
         userHeadPicImageView.setOnClickListener(this);
         buttonConfirm.setOnClickListener(this);
         userHeaderBackgroundImageView.setOnClickListener(this);
+        findViewById(R.id.button_add_moments).setOnClickListener(this);
 
         nicknameEditText.setHint(MySharepreferencesUtils.with(this).getUserName());
 
 
         if (MySharepreferencesUtils.with(this).getUserHeadPicUri().length() >2){
-//            String uriString = MySharepreferencesUtils.with(this).getUserHeadPicUri();
-//            Uri  uri = Uri.parse(uriString);
-//            Picasso.with(this)
-//                    .load("/storage/Download/596dc83c46990.jpg")
-//                    .into(userHeadPicImageView);
             String imagePath = MySharepreferencesUtils.with(this).getUserHeadPicUri();
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             userHeadPicImageView.setImageBitmap(bitmap);
@@ -105,12 +109,6 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
         MyLog.printLog(MyLog.LEVEL_D,"mobile Path : " + mobilePath);
 
 
-        /*Picasso .with(this)
-                .load("http://acloud.avori.cn:8088/project_img/tbapi/MemberImg/2018-01-17" +
-                        "/c88c7fcf-8174-4852-969e-f55db4fa7d83_1516187479972_upload.jpg")
-                .resize(500,500)
-                .centerCrop()
-                .into(userHeadPicImageView);*/
     }
 
     @Override
@@ -118,9 +116,6 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
         Intent intent;
         switch (view.getId()){
             case R.id.imageView_change:
-//                intent = new Intent(Intent.ACTION_PICK,
-//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(intent,CHOOSE_FROM_ALBUM);
                 openAlbum(CHOOSE_FROM_ALBUM);
                 break;
             case R.id.button_confirm:
@@ -129,12 +124,31 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
                     return;
                 }
                 MySharepreferencesUtils.with(this).setUserName(newNickname);
+//                addOneColumn();
                 break;
             case R.id.imageView_header_background:
                 openAlbum(CHOOSE_USER_HEAD_BACKGROUND);
                 break;
+            case R.id.button_add_moments:
+//                addOneColumn();
+                break;
         }
     }
+
+   /* private void addOneColumn() {
+        MyLog.printLog(MyLog.LEVEL_D,"addOneColumn called");
+        MyMoment myMoment = new MyMoment();
+        myMoment.setGoodsTimes(100);
+        myMoment.setMomentTextContent("wawawawawawa,:-O就是这么酷炫，呦呦checknow" +
+                "煎饼果子来一套");
+        myMoment.setMonmentCreatedTime("one minutes ago");
+        myMoment.setNickName("WAWA");
+//        List<String> list = new ArrayList<String>();
+//        list.add("111111111111111111111111111111111111111111111111");
+//        list.add("222222222222222222222222222222222222222222222222");
+        myMoment.setMomentPicturesPath("111111111111;2222222222222;33333333333333");
+        myMoment.save();
+    }*/
 
     private void openAlbum(int imageType){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -148,11 +162,9 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
         if (resultCode == Activity.RESULT_OK){
             switch (requestCode){
                 case CHOOSE_FROM_ALBUM:
-//                    Log.d(TAG,"requestCode = " + requestCode + " ; resultCode = " +
-//                    resultCode + " ; data = " + data.getData().toString());
                     MyLog.printLog(MyLog.LEVEL_D,"data content : "+data.toString());
                     Uri uri = data.getData();
-                    String realPath = getImagePathOnKitkat(uri);// deprecated function
+                    String realPath = TranslationTools.getImageAbsolutePath(this,uri);// deprecated function
                     MyLog.printLog(MyLog.LEVEL_D,"realpath : " + realPath);
                     MySharepreferencesUtils.with(this).setUserHeadPicUri(realPath);
 
@@ -163,7 +175,7 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
                     break;
                 case CHOOSE_USER_HEAD_BACKGROUND:
                     Uri uri_bg = data.getData();
-                    String realPathBg = getImagePathOnKitkat(uri_bg);
+                    String realPathBg = TranslationTools.getImageAbsolutePath(this,uri_bg);
                     MySharepreferencesUtils.with(this).setUserHeadBgPath(realPathBg);
                     Picasso.with(this)
                             .load(uri_bg)
@@ -172,6 +184,7 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
             }
         }
     }
+
 
     private File getUriFromPath(String realPath) {
         File file = new File(realPath);
@@ -186,7 +199,7 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
 //        return file;
     }
 
-    private String getImagePathOnKitkat(Uri uri){
+    /*private String getImagePathOnKitkat(Uri uri){
         if (uri == null) return null;
         String path = null;
         if (DocumentsContract.isDocumentUri(this,uri)){
@@ -210,7 +223,7 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
     }
 
 
-    /*4.4 之后的版本由于返回url类型的原因，有可能无法转化为真实路径*/
+    *//*4.4 之后的版本由于返回url类型的原因，有可能无法转化为真实路径*//*
     private String getImagePath(Uri uri,String selection) {
         String path = null;
         if(uri == null){
@@ -229,5 +242,5 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
             cursor.close();
         }
         return path;
-    }
+    }*/
 }

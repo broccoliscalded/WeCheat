@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.example.davin.wecheat.MainActivity">
+    tools:context="com.example.davin.wecheat.Activities.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_toolbar"

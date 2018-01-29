@@ -1,12 +1,14 @@
-package com.example.davin.wecheat;
+package com.example.davin.wecheat.Activities;
 
+import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,16 +23,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.davin.wecheat.Adapter.MyRecyclerAdapter;
+import com.example.davin.wecheat.MyBeans.MyMoment;
+import com.example.davin.wecheat.Utils.MyRecyclerDecoration;
+import com.example.davin.wecheat.R;
 import com.example.davin.wecheat.Utils.AddShortCut;
+import com.example.davin.wecheat.Utils.MyLog;
 import com.example.davin.wecheat.Utils.MySharepreferencesUtils;
-import com.example.davin.wecheat.Utils.TranslationTools;
-import com.squareup.picasso.Picasso;
+import com.example.davin.wecheat.Utils.ToastUtil;
+
+import org.litepal.crud.DataSupport;
+import org.litepal.tablemanager.Connector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,17 +49,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View view;
     private ImageView headerBackground,headerUserHeadpic;
     private TextView headerUserNickname;
+    List<MyMoment> momentsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        AddShortCut.createShortCut(this,R.mipmap.ic_launcher,R.string.app_name);
+        /**
+         * Attempt to create a short cut at the launcher,but it doesn't work.
+         * */
+//        AddShortCut.createShortCut(this,R.mipmap.ic_launcher,R.string.app_name);
+        try{
+            momentsList = DataSupport.where("id > ?","-1")
+                    .order("id desc")
+                    .find(MyMoment.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         initToolBar();
         initMyRecyclerView();
-        hasNavigationOrNot();
+
+        /*
+         *this function as its name
+         * */
+//        hasNavigationOrNot();
+        Connector.getDatabase();
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions
+            , @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode ){
+            case 2:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Intent intent = new Intent(
+                            MainActivity.this,AddFriendMomentsActivity.class);
+                    startActivity(intent);
+                }else {
+                    ToastUtil.showShort(this,getResources()
+                            .getString(R.string.string_read_storage_permission_denied));
+                }
+                break;
+        }
     }
 
     private void hasNavigationOrNot() {
@@ -70,15 +114,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initMyRecyclerView() {
-        List<String> dataList = new ArrayList<String>();
-        for (int i = 0; i < 10; i++) {
-            String itemString = i + " ";
-            dataList.add(itemString);
+//        List<String> dataList = new ArrayList<String>();
+//        for (int i = 0; i < 10; i++) {
+//            String itemString = i + " ";
+//            dataList.add(itemString);
+//        }
+        if (momentsList == null){
+            return;
+        }
+        if (momentsList.size() == 0 ){
+            return;
         }
         recyclerView = (RecyclerView) findViewById(R.id.my_and_friends_moments_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MyRecyclerAdapter(this);
-        mAdapter.setList(dataList);
+        mAdapter.setList(momentsList);
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new MyRecyclerDecoration());
 
@@ -91,12 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         headerBackground = (ImageView) view.findViewById(R.id.imageView_header_background);
         headerUserHeadpic = (ImageView) view.findViewById(R.id.image_change_head_and_nickname);
         headerUserNickname = (TextView) view.findViewById(R.id.textView_nickname);
-//        headerUserNickname.setText(MySharepreferencesUtils.with(this).getUserName().toString());
         headerUserHeadpic.setOnClickListener(this);
 
-//        Picasso.with(this).load("http://acloud.avori.cn:8088/project_img/tbapi/MemberImg" +
-//                "/2018-01-17/c88c7fcf-8174-4852-969e-f55db4fa7d83_1516187479972_upload.jpg")
-//                .into(headerUserHeadpic);
+
         mAdapter.setMheaderView(view);
     }
 
@@ -104,18 +151,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         String header_user_headpic = MySharepreferencesUtils.with(this).getUserHeadPicUri();
-        if (header_user_headpic.length() > 2){
+        if (header_user_headpic.length() > 2 && headerUserHeadpic != null){
             Bitmap bitmap = BitmapFactory.decodeFile(header_user_headpic,
                     new BitmapFactory.Options());
             headerUserHeadpic.setImageBitmap(bitmap);
         }
         String header_user_headbg = MySharepreferencesUtils.with(this).getUserHeadBgPath();
-        if (header_user_headbg.length()> 2){
+        if (header_user_headbg.length()> 2 && headerBackground!= null){
             Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
+//            图片使用前需要压缩，不然会导致卡顿
+            MyLog.printLog(MyLog.LEVEL_D,"BG image size = " + bitmapBg.getByteCount()/1024/1024 + " M \n" +
+                    " image width = " + bitmapBg.getWidth() + " ; image height = " + bitmapBg.getHeight());
+
             headerBackground.setImageBitmap(bitmapBg);
         }
+        if (!MySharepreferencesUtils.with(this).getUserName().isEmpty() &&
+                MySharepreferencesUtils.with(this).getUserName() != null &&
+                headerUserNickname != null){
+            headerUserNickname.setText(MySharepreferencesUtils.with(this)
+                    .getUserName().toString());
+        }
+        if (mAdapter != null){
+           /* momentsList = DataSupport.findAll(MyMoment.class);
+            List<MyMoment>*/
+           momentsList = DataSupport.where("id > ?","-1")
+                    .order("id desc")
+                    .find(MyMoment.class);
 
-        headerUserNickname.setText(MySharepreferencesUtils.with(this).getUserName().toString());
+            mAdapter.notifyDataSetChanged();
+
+            /*for (int i = 0; i < momentsList.size(); i++) {
+                MyLog.printLog(MyLog.LEVEL_D,momentsList.get(i).toString());
+            }*/
+        }
+
     }
 
     private void initToolBar() {
@@ -123,7 +192,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(mToolbarTb);
         mToolbarTb.setNavigationIcon(ContextCompat.getDrawable(
                 this,R.drawable.ic_action_name));
-//        mToolbarTb.setNavigationIcon(R.drawable.short_line_vertical);
+        mToolbarTb.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
+                }else{
+                    Intent intent = new Intent(
+                            MainActivity.this,AddFriendMomentsActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+
         mToolbarTb.setOnMenuItemClickListener(menuItemListener);
 //        Intent intent = new Intent(this,MomentsActivity.class);
 //        startActivity(intent);
@@ -158,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         break;
                     case R.id.take_photo_choose_container:
-                        
+
                         break;
                     default:
                         break;

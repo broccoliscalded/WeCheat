@@ -8,4 +8,9 @@
     <string name="string_nickname">昵称</string>
     <string name="string_noshow">~</string>
     <string name="string_confirm">确认</string>
+    <string name="take_photos_description">请选择一张图片作为头像</string>
+    <string name="string_enter_your_moment_text">输入你的朋友圈文字内容\n</string>
+    <string name="string_add_pictures">点击添加图片</string>
+    <string name="string_no_name_text_entered">请输入一个昵称</string>
+    <string name="string_read_storage_permission_denied">手机存储空间权限被禁</string>
 </resources>

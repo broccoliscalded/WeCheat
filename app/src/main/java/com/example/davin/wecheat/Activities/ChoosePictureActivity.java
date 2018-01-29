@@ -1,7 +1,9 @@
-package com.example.davin.wecheat;
+package com.example.davin.wecheat.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.davin.wecheat.R;
 
 public class ChoosePictureActivity extends AppCompatActivity {
 

@@ -1,9 +1,11 @@
-package com.example.davin.wecheat;
+package com.example.davin.wecheat.Activities;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import com.example.davin.wecheat.R;
 
 public class MomentsActivity extends AppCompatActivity {
 

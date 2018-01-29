@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.davin.wecheat.Activities.AddFriendMomentsActivity">
+
+    <ImageView
+        android:id="@+id/imageView_friend_portrait"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/take_photos_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:color/darker_gray" />
+
+    <EditText
+        android:id="@+id/editText_friend_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/string_nickname"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_friend_portrait"
+        app:layout_constraintStart_toEndOf="@+id/imageView_friend_portrait"
+        app:layout_constraintTop_toTopOf="@+id/imageView_friend_portrait" />
+
+    <EditText
+        android:id="@+id/editText_text_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="@string/string_enter_your_moment_text"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView_friend_portrait"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_friend_portrait" />
+
+    <Button
+        android:id="@+id/button_2_add_moments_detail_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/string_add_pictures"
+        app:layout_constraintStart_toStartOf="@+id/editText_text_content"
+        app:layout_constraintTop_toBottomOf="@+id/editText_text_content" />
+
+    <Button
+        android:id="@+id/button_add_moment"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/string_confirm"
+        app:layout_constraintStart_toStartOf="@+id/button_2_add_moments_detail_picture"
+        app:layout_constraintTop_toBottomOf="@+id/button_2_add_moments_detail_picture" />
+
+</android.support.constraint.ConstraintLayout>

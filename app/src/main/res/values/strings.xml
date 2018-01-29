@@ -7,4 +7,9 @@
     <string name="string_select_from_album">Select Photos or Videos from Album</string>
     <string name="string_nickname">Nickname</string>
     <string name="string_confirm">Confirm</string>
+    <string name="take_photos_description">add a picture as your head portrait</string>
+    <string name="string_enter_your_moment_text">Enter your moment text</string>
+    <string name="string_add_pictures">Click To Add Pictures</string>
+    <string name="string_no_name_text_entered">Please enter a name</string>
+    <string name="string_read_storage_permission_denied">Read phone storage permission denied</string>
 </resources>

@@ -20,3 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontwarn com.squareup.okhttp.**
+
+#Litepal Proguard rule
+-keep class org.litepal.**{
+    *;
+}
+-keep class * extends org.litepal.crud.DataSupport{
+    *;
+}
