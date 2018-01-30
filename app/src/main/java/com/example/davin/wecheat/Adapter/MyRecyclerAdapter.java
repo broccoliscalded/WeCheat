@@ -160,7 +160,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                 }
 
                 /*SpannableString add favorite to supporters*/
-                SpannableString spString = new SpannableString("  巴拉巴拉小魔仙, 什么鬼012345678");
+                String[] myfriends = mContext.getResources().getStringArray(R.array.my_friends);
+                String mfriendsString ="";
+                for (int i = 0; i < myfriends.length; i++) {
+                    mfriendsString = mfriendsString + myfriends[i] + "; ";
+                }
+                SpannableString spString = new SpannableString("  "+mfriendsString);
                 Drawable drawableFavorite = ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_darkblue);
                 drawableFavorite.setBounds(0,0,
                         TranslationTools.dip2px(mContext,14),
