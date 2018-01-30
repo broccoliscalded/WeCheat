@@ -6,110 +6,120 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="horizontal"
-    android:paddingEnd="20dp"
+    android:paddingBottom="15dp"
+    android:paddingEnd="10dp"
     android:paddingStart="15dp"
     android:paddingTop="15dp">
 
     <ImageView
         android:id="@+id/imageView_user_portrait"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleType="centerCrop"
         app:srcCompat="@color/colorAccent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="15dp">
+        android:paddingLeft="10dp">
 
         <TextView
             android:id="@+id/textView_user_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="小王"
-            android:textColor="#6480ab" />
+            android:textColor="@color/colorTextDarkBlue" />
 
         <TextView
             android:id="@+id/textView_item_mark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="TextView \n ssasf"
             android:textColor="@android:color/black" />
 
         <LinearLayout
             android:id="@+id/image_group_1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/moments_image_1"
-                android:layout_width="90dp"
-                android:layout_height="90dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/moments_image_2"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginLeft="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="3dp"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/moments_image_3"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginLeft="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="3dp"
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/image_group_2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/moments_image_4"
-                android:layout_width="90dp"
-                android:layout_height="90dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/moments_image_5"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginLeft="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="3dp"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/moments_image_6"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginLeft="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="3dp"
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/image_group_3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/moments_image_7"
-                android:layout_width="90dp"
-                android:layout_height="90dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/moments_image_8"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginLeft="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="3dp"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/moments_image_9"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginLeft="4dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="3dp"
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,10 +129,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textView_create_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5 hour(s) " />
+                android:text="5 hour(s) "
+                android:textSize="12sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -137,6 +148,24 @@
                     android:src="@drawable/add_goods" />
             </RelativeLayout>
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_gray"
+            android:paddingBottom="8dp"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/textView_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/colorTextDarkBlue"
+                android:textSize="14sp" />
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -33,11 +33,17 @@ public class TranslationTools {
         return (int) (dpValue * scale + 0.5f);
     }
 
+    /*
+    * 由相机返回的uri获得图片的真实路径
+    * */
     public static String getImageAbsolutePath(Context context,Uri uri){
         if (uri == null) return null;
         String path = null;
         if (DocumentsContract.isDocumentUri(context,uri)){
             String docId = DocumentsContract.getDocumentId(uri);
+            /*
+            * Android 4 之后可能会获取到的不同的uri,不能直接获取到路径
+            * */
             if ("com.android.providers.media.documents".equals(uri.getAuthority())){
                 String id = docId.split(":")[1];
                 String selection = MediaStore.Images.Media._ID + "=" + id ;
@@ -56,6 +62,9 @@ public class TranslationTools {
         return path;
     }
 
+    /*
+    * Android 4 之前 ,可以直接由图片的uri获取到图片的绝对路径
+    * */
     private static String getImagePath(Context context,Uri uri,String selection) {
         String path = null;
         if(uri == null){
@@ -73,10 +82,14 @@ public class TranslationTools {
         return path;
     }
 
+
+    /*
+    * 获取当前系统时间的字符串,格式为2018/01/23/12/55/55,
+    * */
     public static String getCurrentTimeString(){
         Date currentTime = new Date(System.currentTimeMillis());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                "yyyyMMddhhmmss", Locale.getDefault());
+                "yyyy/MM/dd/hh/mm", Locale.getDefault());
         String dateString = simpleDateFormat.format(currentTime);
 
         return dateString;

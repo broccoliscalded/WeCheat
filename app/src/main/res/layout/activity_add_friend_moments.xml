@@ -13,6 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/take_photos_description"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/darker_gray" />
@@ -60,5 +61,46 @@
         android:text="@string/string_confirm"
         app:layout_constraintStart_toStartOf="@+id/button_2_add_moments_detail_picture"
         app:layout_constraintTop_toBottomOf="@+id/button_2_add_moments_detail_picture" />
+
+    <ImageView
+        android:id="@+id/imageView_moment_1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/string_select_from_album"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_add_moment"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <ImageView
+        android:id="@+id/imageView_moment_2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/toolbar_title"
+        app:layout_constraintStart_toEndOf="@+id/imageView_moment_1"
+        app:layout_constraintTop_toTopOf="@+id/imageView_moment_1"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <ImageView
+        android:id="@+id/imageView_moment_3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/toolbar_title"
+        app:layout_constraintStart_toEndOf="@+id/imageView_moment_2"
+        app:layout_constraintTop_toTopOf="@+id/imageView_moment_2"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <ImageView
+        android:id="@+id/imageView_moment_4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/toolbar_title"
+        app:layout_constraintStart_toEndOf="@+id/imageView_moment_3"
+        app:layout_constraintTop_toTopOf="@+id/imageView_moment_3"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
 </android.support.constraint.ConstraintLayout>

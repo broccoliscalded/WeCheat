@@ -35,6 +35,7 @@ import com.example.davin.wecheat.Utils.AddShortCut;
 import com.example.davin.wecheat.Utils.MyLog;
 import com.example.davin.wecheat.Utils.MySharepreferencesUtils;
 import com.example.davin.wecheat.Utils.ToastUtil;
+import com.example.davin.wecheat.Utils.TranslationTools;
 
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
@@ -154,8 +155,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (header_user_headpic.length() > 2 && headerUserHeadpic != null){
             Bitmap bitmap = BitmapFactory.decodeFile(header_user_headpic,
                     new BitmapFactory.Options());
-            headerUserHeadpic.setImageBitmap(bitmap);
+            MyLog.printLog(MyLog.LEVEL_D,"user portrait size = " + bitmap.getByteCount());
+            int borderLength = TranslationTools.dip2px(this,80);
+            Bitmap sbit = Bitmap.createScaledBitmap(bitmap,borderLength,borderLength,true);
+            bitmap.recycle();
+            MyLog.printLog(MyLog.LEVEL_D,"user portrait scaled size = " + sbit.getByteCount());
+            headerUserHeadpic.setImageBitmap(sbit);
         }
+
+
         String header_user_headbg = MySharepreferencesUtils.with(this).getUserHeadBgPath();
         if (header_user_headbg.length()> 2 && headerBackground!= null){
             Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
