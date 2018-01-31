@@ -25,7 +25,8 @@
         <activity android:name=".Activities.MomentsActivity" />
         <activity android:name=".Activities.ChoosePictureActivity" />
         <activity android:name=".Activities.ChangeHostHeadAndNicknameActivity" />
-        <activity android:name=".Activities.AddFriendMomentsActivity"></activity>
+        <activity android:name=".Activities.AddMomentsActivity" />
+        <activity android:name=".Activities.MyOwnMomentsActivity"></activity>
     </application>
 
 </manifest>

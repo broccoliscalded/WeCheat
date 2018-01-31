@@ -7,4 +7,6 @@
     <color name="colorTextGray">#818181</color>
     <color name="colorBackGroundGray">#55d9d0d0</color>
     <color name="colorTextDarkBlue">#6480ab</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

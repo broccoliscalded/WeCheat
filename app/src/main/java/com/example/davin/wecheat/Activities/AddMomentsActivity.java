@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddFriendMomentsActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddMomentsActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final int ADD_USER_PROTRAIT_FLAG = 0;
     public static final int ADD_MOMENT_PICS_FLAG = 1;

@@ -145,7 +145,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                         if (monthesAgo > 0){
                             durationString = monthesAgo + "个月前";
                         }else if (daysAgo > 0){
-                            durationString = daysAgo + "天前";
+                            if(daysAgo == 1){
+                                durationString = "昨天";
+                            }else {
+                                durationString = daysAgo + "天前";
+                            }
+
                         }else if (hoursAgo>0){
                             durationString = hoursAgo + "小时前";
                         }else if (minutesAgo>0){
@@ -163,7 +168,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                 String[] myfriends = mContext.getResources().getStringArray(R.array.my_friends);
                 String mfriendsString ="";
                 for (int i = 0; i < myfriends.length; i++) {
-                    mfriendsString = mfriendsString + myfriends[i] + "; ";
+                    mfriendsString = mfriendsString + myfriends[i] + ",  ";
                 }
                 SpannableString spString = new SpannableString("  "+mfriendsString);
                 Drawable drawableFavorite = ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_darkblue);

@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,7 +30,6 @@ import com.example.davin.wecheat.Adapter.MyRecyclerAdapter;
 import com.example.davin.wecheat.MyBeans.MyMoment;
 import com.example.davin.wecheat.Utils.MyRecyclerDecoration;
 import com.example.davin.wecheat.R;
-import com.example.davin.wecheat.Utils.AddShortCut;
 import com.example.davin.wecheat.Utils.MyLog;
 import com.example.davin.wecheat.Utils.MySharepreferencesUtils;
 import com.example.davin.wecheat.Utils.ToastUtil;
@@ -40,10 +38,13 @@ import com.example.davin.wecheat.Utils.TranslationTools;
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    /*flag value 0 means add my own moment; flag value 1 means add friend flag*/
+    public static final String ADD_MOMENT_FLAG = "com.example.davin.wecheat.MainActivity.AMomentFlag";
+//    public static final String ADD_MY_OWN_MOMENT_FLAG = "com.example.davin.wecheat.MainActivity.aMyOwnMomentFlag";
 
     private RecyclerView recyclerView;
     private MyRecyclerAdapter mAdapter;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-
+        getPermissions();
         initToolBar();
         initMyRecyclerView();
 
@@ -82,6 +83,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void getPermissions() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions
             , @NonNull int[] grantResults) {
@@ -89,12 +98,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode ){
             case 2:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Intent intent = new Intent(
-                            MainActivity.this,AddFriendMomentsActivity.class);
-                    startActivity(intent);
+//do nothing when u have got the permission
                 }else {
-                    ToastUtil.showShort(this,getResources()
-                            .getString(R.string.string_read_storage_permission_denied));
+//                    ToastUtil.showShort(this,getResources()
+//                            .getString(R.string.string_read_storage_permission_denied));
+//u must got the {Manifest.permission.WRITE_EXTERNAL_STORAGE},otherwise any user action may cause crash
+                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
                 }
                 break;
         }
@@ -203,15 +213,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mToolbarTb.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
-                }else{
-                    Intent intent = new Intent(
-                            MainActivity.this,AddFriendMomentsActivity.class);
-                    startActivity(intent);
-                }
+//                if (ContextCompat.checkSelfPermission(MainActivity.this,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
+//                }else{
+                Intent intent = new Intent(
+                        MainActivity.this,AddMomentsActivity.class);
+                intent.putExtra(ADD_MOMENT_FLAG,1);
+                startActivity(intent);
+//                }
 
             }
         });
@@ -252,6 +263,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.take_photo_choose_container:
 
+                        /*
+                        通往修改头像,昵称,背景图片的通路
+                        Intent intent = new Intent(MainActivity.this,ChangeHostHeadAndNicknameActivity.class);
+                        startActivity(intent);*/
                         break;
                     default:
                         break;
@@ -259,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         view.findViewById(R.id.textView_select_from_sdcard).setOnClickListener(listener);
+        view.findViewById(R.id.take_photo_choose_container).setOnClickListener(listener);
 
         dialog.setContentView(view);
         dialog.show();
@@ -269,8 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent;
         switch (view.getId()){
             case R.id.image_change_head_and_nickname:
-                intent = new Intent(this,ChangeHostHeadAndNicknameActivity.class);
-                startActivity(intent);
+
                 break;
 
         }

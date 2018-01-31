@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.davin.wecheat.Activities.AddFriendMomentsActivity">
+    tools:context="com.example.davin.wecheat.Activities.AddMomentsActivity">
 
     <ImageView
         android:id="@+id/imageView_friend_portrait"

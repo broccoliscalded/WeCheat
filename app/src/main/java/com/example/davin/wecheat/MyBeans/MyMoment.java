@@ -17,7 +17,6 @@ public class MyMoment extends DataSupport{
     private String momentUserPortraitPath;
     private int goodsTimes;
 
-
     public String getNickName() {
         return nickName;
     }
@@ -34,13 +33,6 @@ public class MyMoment extends DataSupport{
         this.momentTextContent = momentTextContent;
     }
 
-    /*public List<String> getMomentPicturesPath() {
-        return momentPicturesPath;
-    }
-
-    public void setMomentPicturesPath(List<String> momentPicturesPath) {
-        this.momentPicturesPath = momentPicturesPath;
-    }*/
 
     public String getMomentPicturesPath() {
         return momentPicturesPath;

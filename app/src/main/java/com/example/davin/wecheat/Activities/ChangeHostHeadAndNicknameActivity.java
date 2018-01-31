@@ -135,21 +135,6 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
         }
     }
 
-   /* private void addOneColumn() {
-        MyLog.printLog(MyLog.LEVEL_D,"addOneColumn called");
-        MyMoment myMoment = new MyMoment();
-        myMoment.setGoodsTimes(100);
-        myMoment.setMomentTextContent("wawawawawawa,:-O就是这么酷炫，呦呦checknow" +
-                "煎饼果子来一套");
-        myMoment.setMonmentCreatedTime("one minutes ago");
-        myMoment.setNickName("WAWA");
-//        List<String> list = new ArrayList<String>();
-//        list.add("111111111111111111111111111111111111111111111111");
-//        list.add("222222222222222222222222222222222222222222222222");
-        myMoment.setMomentPicturesPath("111111111111;2222222222222;33333333333333");
-        myMoment.save();
-    }*/
-
     private void openAlbum(int imageType){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");

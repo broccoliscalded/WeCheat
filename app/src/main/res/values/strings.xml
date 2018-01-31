@@ -12,4 +12,8 @@
     <string name="string_add_pictures">Click To Add Pictures</string>
     <string name="string_no_name_text_entered">Please enter a name</string>
     <string name="string_read_storage_permission_denied">Read phone storage permission denied</string>
+
+    <string name="title_activity_my_own_moments">MyOwnMomentsActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
