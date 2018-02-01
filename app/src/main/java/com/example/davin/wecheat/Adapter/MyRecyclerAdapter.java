@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.davin.wecheat.CustomViews.MyImageSpan;
 import com.example.davin.wecheat.MyBeans.MyMoment;
 import com.example.davin.wecheat.R;
 import com.example.davin.wecheat.Utils.MyLog;
@@ -78,9 +79,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     }
 
     /**
-     *重写这个方法，很重要，是加入Header和Footer的关键，我们通过判断item的类型，从而绑定不同的view
-     *如果是headerview或者footerview，直接在viewholder中返回
-     * */
+     * 重写这个方法，很重要，是加入Header和Footer的关键，我们通过判断item的类型，从而绑定不同的view
+     * 如果是headerview或者footerview，直接在viewholder中返回
+     * @author daniel
+     * @time 18-2-1 上午10:31
+     *
+     */
     @Override
     public MyRecyclerAdapter.MyViewHolder onCreateViewHolder(
             ViewGroup parent, int viewType) {
@@ -112,16 +116,16 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                 }else {
                     mPosition = position;
                 }
-                ((MyViewHolder) holder).textView.setText(
+                holder.textView.setText(
                         list.get(mPosition).getMomentTextContent().toString());
 
-                ((MyViewHolder) holder).textViewUserNickname.setText(
+                holder.textViewUserNickname.setText(
                         list.get(mPosition).getNickName().toString());
                 if (list.get(mPosition).getMomentUserPortraitPath()!=null){
                     try {
                         bitmap = BitmapFactory.decodeFile(
                                 list.get(mPosition).getMomentUserPortraitPath().toString());
-                        ((MyViewHolder) holder).imageViewUserPortrait.setImageBitmap(bitmap);
+                        holder.imageViewUserPortrait.setImageBitmap(bitmap);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -158,7 +162,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                         }else {
                             durationString = "刚刚";
                         }
-                        ((MyViewHolder) holder).textViewCreateTime.setText(durationString);
+                        holder.textViewCreateTime.setText(durationString);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -168,15 +172,20 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                 String[] myfriends = mContext.getResources().getStringArray(R.array.my_friends);
                 String mfriendsString ="";
                 for (int i = 0; i < myfriends.length; i++) {
-                    mfriendsString = mfriendsString + myfriends[i] + ",  ";
+                    if (i == myfriends.length - 1){
+                        mfriendsString = mfriendsString + myfriends[i];
+                    }else {
+                        mfriendsString = mfriendsString + myfriends[i] + " ,  ";
+                    }
+
                 }
                 SpannableString spString = new SpannableString("  "+mfriendsString);
                 Drawable drawableFavorite = ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_darkblue);
                 drawableFavorite.setBounds(0,0,
                         TranslationTools.dip2px(mContext,14),
                         TranslationTools.dip2px(mContext,15));
-                spString.setSpan(new ImageSpan(drawableFavorite),0,1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                ((MyViewHolder) holder).textViewFavorite.setText(spString);
+                spString.setSpan(new MyImageSpan(drawableFavorite),0,1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.textViewFavorite.setText(spString);
 
                 if (list.get(mPosition).getMomentPicturesPath()!= null){
                     String[] pathString = list.get(mPosition)
@@ -184,19 +193,19 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                     if (pathString.length > 0){
                         try{
 
-                            for (int i = 0; i < ((MyViewHolder) holder).momentImagesList.size(); i++) {
+                            for (int i = 0; i < holder.momentImagesList.size(); i++) {
                                 if (i < pathString.length){
-                                    ((MyViewHolder) holder).momentImagesList.get(i)
+                                    holder.momentImagesList.get(i)
                                             .setVisibility(View.VISIBLE);
                                 }else {
-                                    ((MyViewHolder) holder).momentImagesList.get(i)
+                                    holder.momentImagesList.get(i)
                                             .setVisibility(View.GONE);
                                 }
                             }
 
                             for (int i = 0; i < pathString.length; i++) {
                                 bitmap = BitmapFactory.decodeFile(pathString[i]);
-                                ((MyViewHolder) holder).momentImagesList.get(i)
+                                holder.momentImagesList.get(i)
                                         .setImageBitmap(bitmap);
                                 MyLog.printLog(MyLog.LEVEL_D,"path " + i + " = " + pathString[i]);
                             }
@@ -209,8 +218,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
                 MyLog.printLog(MyLog.LEVEL_D,"list size = "
                         + list.get(mPosition).toString());
-//                ((MyViewHolder) holder).imageViewUserPortrait;
-
 
             }
             return;
@@ -243,17 +250,20 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
     /**
      * 加载每个view item的布局
-     * */
+     * @author daniel
+     * @time 18-2-1 上午10:24
+     *
+     */
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView,textViewUserNickname,textViewCreateTime,textViewFavorite;
         ImageView imageViewUserPortrait;
-        List<ImageView> momentImagesList = new ArrayList<ImageView>();
+        List<ImageView> momentImagesList = new ArrayList<>();
         int[] imageIds = {  R.id.moments_image_1,R.id.moments_image_2,R.id.moments_image_3,
                             R.id.moments_image_4,R.id.moments_image_5,R.id.moments_image_6,
                             R.id.moments_image_7,R.id.moments_image_8,R.id.moments_image_9};
 
-        public MyViewHolder(View itemView) {
+        private MyViewHolder(View itemView) {
             super(itemView);
             if (itemView == mheaderView){
                 return;
@@ -261,13 +271,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             if (itemView == mfooterView){
                 return;
             }
-            textView = (TextView) itemView.findViewById(R.id.textView_item_mark);
-            textViewUserNickname = (TextView) itemView.findViewById(R.id.textView_user_nickname);
-            imageViewUserPortrait = (ImageView) itemView.findViewById(R.id.imageView_user_portrait);
-            textViewCreateTime = (TextView) itemView.findViewById(R.id.textView_create_time);
-            textViewFavorite = (TextView) itemView.findViewById(R.id.textView_favorite);
-            for (int i = 0; i < imageIds.length; i++) {
-                ImageView imageView = (ImageView) itemView.findViewById(imageIds[i]);
+            textView = itemView.findViewById(R.id.textView_item_mark);
+            textViewUserNickname =  itemView.findViewById(R.id.textView_user_nickname);
+            imageViewUserPortrait =  itemView.findViewById(R.id.imageView_user_portrait);
+            textViewCreateTime = itemView.findViewById(R.id.textView_create_time);
+            textViewFavorite =  itemView.findViewById(R.id.textView_favorite);
+
+            for (int aid: imageIds) {
+                ImageView imageView = itemView.findViewById(aid);
                 momentImagesList.add(imageView);
             }
         }

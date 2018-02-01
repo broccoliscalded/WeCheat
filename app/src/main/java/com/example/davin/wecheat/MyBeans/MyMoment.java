@@ -16,6 +16,15 @@ public class MyMoment extends DataSupport{
     private String monmentCreatedTime;
     private String momentUserPortraitPath;
     private int goodsTimes;
+    private boolean isMyOwnMoment = false;
+
+    public boolean isMyOwnMoment() {
+        return isMyOwnMoment;
+    }
+
+    public void setMyOwnMoment(boolean myOwnMoment) {
+        isMyOwnMoment = myOwnMoment;
+    }
 
     public String getNickName() {
         return nickName;

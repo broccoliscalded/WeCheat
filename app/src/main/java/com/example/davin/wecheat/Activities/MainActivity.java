@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         /**
          * Attempt to create a short cut at the launcher,but it doesn't work.
          * */
@@ -74,10 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initToolBar();
         initMyRecyclerView();
 
-        /*
-         *this function as its name
-         * */
-//        hasNavigationOrNot();
+        
         Connector.getDatabase();
 
 
@@ -100,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 //do nothing when u have got the permission
                 }else {
-//                    ToastUtil.showShort(this,getResources()
-//                            .getString(R.string.string_read_storage_permission_denied));
 //u must got the {Manifest.permission.WRITE_EXTERNAL_STORAGE},otherwise any user action may cause crash
                     ActivityCompat.requestPermissions(MainActivity.this,new String[]{
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
@@ -123,20 +119,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("naviheight","has no navigation !");
         }
     }
-
+    
     private void initMyRecyclerView() {
-//        List<String> dataList = new ArrayList<String>();
-//        for (int i = 0; i < 10; i++) {
-//            String itemString = i + " ";
-//            dataList.add(itemString);
-//        }
+
         if (momentsList == null){
             return;
         }
         if (momentsList.size() == 0 ){
             return;
         }
-        recyclerView = (RecyclerView) findViewById(R.id.my_and_friends_moments_recyclerView);
+        recyclerView = findViewById(R.id.my_and_friends_moments_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MyRecyclerAdapter(this);
         mAdapter.setList(momentsList);
@@ -149,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setHeaderView(RecyclerView recyclerView) {
         view = LayoutInflater.from(this).inflate(R.layout.moments_list_layout_header
                 ,recyclerView,false);
-        headerBackground = (ImageView) view.findViewById(R.id.imageView_header_background);
-        headerUserHeadpic = (ImageView) view.findViewById(R.id.image_change_head_and_nickname);
-        headerUserNickname = (TextView) view.findViewById(R.id.textView_nickname);
+        headerBackground =  view.findViewById(R.id.imageView_header_background);
+        headerUserHeadpic =  view.findViewById(R.id.image_change_head_and_nickname);
+        headerUserNickname =  view.findViewById(R.id.textView_nickname);
         headerUserHeadpic.setOnClickListener(this);
 
 
@@ -187,50 +179,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 MySharepreferencesUtils.with(this).getUserName() != null &&
                 headerUserNickname != null){
             headerUserNickname.setText(MySharepreferencesUtils.with(this)
-                    .getUserName().toString());
+                    .getUserName());
         }
         if (mAdapter != null){
-           /* momentsList = DataSupport.findAll(MyMoment.class);
-            List<MyMoment>*/
+
            momentsList = DataSupport.where("id > ?","-1")
                     .order("id desc")
                     .find(MyMoment.class);
+           mAdapter.setList(momentsList);
+           mAdapter.notifyDataSetChanged();
 
-            mAdapter.notifyDataSetChanged();
 
-            /*for (int i = 0; i < momentsList.size(); i++) {
-                MyLog.printLog(MyLog.LEVEL_D,momentsList.get(i).toString());
-            }*/
         }
 
     }
 
     private void initToolBar() {
-        Toolbar mToolbarTb = (Toolbar) findViewById(R.id.tb_toolbar);
+        Toolbar mToolbarTb = findViewById(R.id.tb_toolbar);
         setSupportActionBar(mToolbarTb);
         mToolbarTb.setNavigationIcon(ContextCompat.getDrawable(
                 this,R.drawable.ic_action_name));
         mToolbarTb.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (ContextCompat.checkSelfPermission(MainActivity.this,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-//                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
-//                            Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
-//                }else{
+
                 Intent intent = new Intent(
                         MainActivity.this,AddMomentsActivity.class);
                 intent.putExtra(ADD_MOMENT_FLAG,1);
                 startActivity(intent);
-//                }
 
             }
         });
 
 
         mToolbarTb.setOnMenuItemClickListener(menuItemListener);
-//        Intent intent = new Intent(this,MomentsActivity.class);
-//        startActivity(intent);
     }
 
     @Override
@@ -252,17 +234,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     private void showAddMonmentsDialog() {
-        Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this);
         View view = getLayoutInflater().inflate(R.layout.take_photo_or_cp_dialog_layout,null);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.id.textView_select_from_sdcard:
-
+                        Intent intent = new Intent(MainActivity.this,ChangeHostHeadAndNicknameActivity.class);
+                        startActivity(intent);
+                        dialog.dismiss();
                         break;
                     case R.id.take_photo_choose_container:
-
+                        Intent intent2 = new Intent(
+                                MainActivity.this,AddMomentsActivity.class);
+                        intent2.putExtra(ADD_MOMENT_FLAG,0);
+                        startActivity(intent2);
+                        dialog.dismiss();
                         /*
                         通往修改头像,昵称,背景图片的通路
                         Intent intent = new Intent(MainActivity.this,ChangeHostHeadAndNicknameActivity.class);
@@ -282,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Intent intent;
         switch (view.getId()){
             case R.id.image_change_head_and_nickname:
 
@@ -290,57 +277,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
-    /*class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.MyViewHolder>{
-
-        private Context mContext;
-        private List<String> list;
-
-        public void setList(List<String> list){
-            this.list = list;
-        }
-
-        public MyRecycleAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder viewHolder = new MyViewHolder(
-                    LayoutInflater.from(mContext).inflate(
-                            R.layout.simple_recyclerview_item,parent,false));
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.textView.setText(mContext.getString(R.string.string_camera )+"\n"
-                    + list.get(position));
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        public void setHeaderView(View view) {
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return super.getItemViewType(position);
-        }
-
-        class MyViewHolder extends RecyclerView.ViewHolder{
-
-            TextView textView;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                textView = (TextView) itemView.findViewById(R.id.textView_item_mark);
-            }
-        }
-    }*/
 
 }

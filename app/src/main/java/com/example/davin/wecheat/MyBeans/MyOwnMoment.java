@@ -11,6 +11,15 @@ public class MyOwnMoment extends DataSupport {
     private String monmentCreatedTime;
     private String momentTextContent;
     private String momentPicturesPath ;
+    private String friendPortraitGroupString;
+
+    public String getFriendPortraitGroupString() {
+        return friendPortraitGroupString;
+    }
+
+    public void setFriendPortraitGroupString(String friendPortraitGroupString) {
+        this.friendPortraitGroupString = friendPortraitGroupString;
+    }
 
     public String getMonmentCreatedTime() {
         return monmentCreatedTime;
