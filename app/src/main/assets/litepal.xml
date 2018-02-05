@@ -19,7 +19,7 @@
 			For example:
     	<version value="1" />
     -->
-    <version value="５" />
+    <version value="6" />
 
     <!--
     	Define your models in the list with mapping tag, LitePal will
@@ -34,6 +34,7 @@
     <list>
         <mapping class="com.example.davin.wecheat.MyBeans.MyMoment"></mapping>
         <mapping class="com.example.davin.wecheat.MyBeans.MyOwnMoment"></mapping>
+        <mapping class="com.example.davin.wecheat.MyBeans.MyFriendsInformation"></mapping>
     </list>
 
     <!--

@@ -13,4 +13,6 @@
     <string name="string_add_pictures">点击添加图片</string>
     <string name="string_no_name_text_entered">请输入一个昵称</string>
     <string name="string_read_storage_permission_denied">手机存储空间权限被禁</string>
+    <string name="string_name_array">中二气息的名字</string>
+    <string name="string_random_names">随机姓名</string>
 </resources>

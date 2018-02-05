@@ -2,6 +2,7 @@ package com.example.davin.wecheat.MyBeans;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by daniel on 18-1-25.
  */
 
-public class MyMoment extends DataSupport{
+public class MyMoment extends DataSupport implements Serializable{
     private String nickName;
     private String momentTextContent;
     private String momentPicturesPath ;
@@ -17,6 +18,15 @@ public class MyMoment extends DataSupport{
     private String momentUserPortraitPath;
     private int goodsTimes;
     private boolean isMyOwnMoment = false;
+    private String favoriteNames;
+
+    public String getFavoriteNames() {
+        return favoriteNames;
+    }
+
+    public void setFavoriteNames(String favoriteNames) {
+        this.favoriteNames = favoriteNames;
+    }
 
     public boolean isMyOwnMoment() {
         return isMyOwnMoment;
@@ -84,6 +94,8 @@ public class MyMoment extends DataSupport{
                 ", monmentCreatedTime='" + monmentCreatedTime + '\'' +
                 ", momentUserPortraitPath='" + momentUserPortraitPath + '\'' +
                 ", goodsTimes=" + goodsTimes +
+                ", isMyOwnMoment=" + isMyOwnMoment +
+                ", favoriteNames='" + favoriteNames + '\'' +
                 '}';
     }
 }

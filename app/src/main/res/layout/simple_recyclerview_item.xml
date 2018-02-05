@@ -140,11 +140,13 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:id="@+id/imageView_add_favorite"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:cropToPadding="false"
+                    android:padding="12dp"
                     android:src="@drawable/add_goods" />
             </RelativeLayout>
         </LinearLayout>

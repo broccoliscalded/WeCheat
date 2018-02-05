@@ -16,4 +16,6 @@
     <string name="title_activity_my_own_moments">MyOwnMomentsActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="string_name_array">amazing_name</string>
+    <string name="string_random_names">Random names</string>
 </resources>

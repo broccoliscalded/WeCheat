@@ -59,10 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /**
-         * Attempt to create a short cut at the launcher,but it doesn't work.
-         * */
-//        AddShortCut.createShortCut(this,R.mipmap.ic_launcher,R.string.app_name);
+        //        AddShortCut.createShortCut(this,R.mipmap.ic_launcher,R.string.app_name);
         try{
             momentsList = DataSupport.where("id > ?","-1")
                     .order("id desc")
@@ -183,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (mAdapter != null){
 
-           momentsList = DataSupport.where("id > ?","-1")
+           momentsList = DataSupport//.where("id > ?","-1")
                     .order("id desc")
                     .find(MyMoment.class);
            mAdapter.setList(momentsList);
@@ -241,16 +238,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.id.textView_select_from_sdcard:
+                        dialog.dismiss();
                         Intent intent = new Intent(MainActivity.this,ChangeHostHeadAndNicknameActivity.class);
                         startActivity(intent);
-                        dialog.dismiss();
+
                         break;
                     case R.id.take_photo_choose_container:
+                        dialog.dismiss();
                         Intent intent2 = new Intent(
                                 MainActivity.this,AddMomentsActivity.class);
                         intent2.putExtra(ADD_MOMENT_FLAG,0);
                         startActivity(intent2);
-                        dialog.dismiss();
                         /*
                         通往修改头像,昵称,背景图片的通路
                         Intent intent = new Intent(MainActivity.this,ChangeHostHeadAndNicknameActivity.class);
