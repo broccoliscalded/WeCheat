@@ -18,4 +18,5 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="string_name_array">amazing_name</string>
     <string name="string_random_names">Random names</string>
+    <string name="string_save_something">save</string>
 </resources>

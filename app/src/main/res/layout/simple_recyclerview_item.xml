@@ -147,7 +147,7 @@
                     android:layout_centerVertical="true"
                     android:cropToPadding="false"
                     android:padding="12dp"
-                    android:src="@drawable/add_goods" />
+                    android:src="@drawable/drawable_lable" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -164,7 +164,7 @@
                 android:id="@+id/textView_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="8sp"
+                android:lineSpacingExtra="6sp"
                 android:text="TextView \n balabala"
                 android:textColor="@color/colorTextDarkBlue"
                 android:textSize="14sp" />

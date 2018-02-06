@@ -3,6 +3,8 @@ package com.example.davin.wecheat.Utils;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -93,5 +95,24 @@ public class TranslationTools {
         String dateString = simpleDateFormat.format(currentTime);
 
         return dateString;
+    }
+    
+    /**
+     * 采样率压缩图片
+     * @author daniel
+     * @time 18-2-6 下午5:19
+     * 
+     */
+    public Bitmap SimplerCompressionPackge(String imagePath){
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 2;
+        options.inJustDecodeBounds = true;
+
+
+//        BitmapFactory.decodeFile(imagePath,options);
+//        MyLog.printLog(MyLog.LEVEL_D,"bitmap size :" + bitmap.);
+
+        return null;
     }
 }
