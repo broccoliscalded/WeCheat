@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.davin.wecheat.Activities.FavoriteDetailActivity;
 import com.example.davin.wecheat.CustomViews.MyImageSpan;
 import com.example.davin.wecheat.MyBeans.MyMoment;
+import com.example.davin.wecheat.MyBeans.MyMomentRecyclerCache;
 import com.example.davin.wecheat.R;
 import com.example.davin.wecheat.Utils.MyLog;
 import com.example.davin.wecheat.Utils.TranslationTools;
@@ -42,6 +43,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     private View mfooterView;//emmmm... my footerview
     private Context mContext;
     private List<MyMoment> list ;
+    private List<MyMomentRecyclerCache> cacheList = new ArrayList<>();
 
     public MyRecyclerAdapter(Context mContext) {
         this.mContext = mContext;
@@ -96,9 +98,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         if (mfooterView != null && viewType == TYPE_FOOTER){
             return new MyViewHolder(mfooterView);
         }
-        MyRecyclerAdapter.MyViewHolder myViewHolder = new MyRecyclerAdapter.MyViewHolder(
-                LayoutInflater.from(mContext).inflate(
-                        R.layout.simple_recyclerview_item,parent,false));
+        MyRecyclerAdapter.MyViewHolder myViewHolder = new MyRecyclerAdapter.MyViewHolder
+                (LayoutInflater.from(mContext).inflate
+                    (R.layout.simple_recyclerview_item,
+                    parent,false
+                    )
+                );
         return myViewHolder;
     }
 
@@ -137,8 +142,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                         list.get(mPosition).getNickName());
                 if (list.get(mPosition).getMomentUserPortraitPath()!=null){
                     try {
-                        bitmap = BitmapFactory.decodeFile(
-                                list.get(mPosition).getMomentUserPortraitPath());
+                        /*bitmap = BitmapFactory.decodeFile(
+                                list.get(mPosition).getMomentUserPortraitPath());*/
+//                        bitmap = TranslationTools.SimplerCompressionPackge(
+//                                list.get(mPosition).getMomentUserPortraitPath(),
+//                                TranslationTools.dip2px(mContext,40),
+//                                TranslationTools.dip2px(mContext,40)
+//                        );
+                        bitmap = cacheList.get(mPosition).getMomentUserPortrait();
                         holder.imageViewUserPortrait.setImageBitmap(bitmap);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -218,10 +229,16 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                             }
 
                             for (int i = 0; i < pathString.length; i++) {
-                                bitmap = BitmapFactory.decodeFile(pathString[i]);
+//                                bitmap = BitmapFactory.decodeFile(pathString[i]);
+//                                bitmap = TranslationTools.SimplerCompressionPackge(
+//                                        pathString[i],
+//                                        TranslationTools.dip2px(mContext,80),
+//                                        TranslationTools.dip2px(mContext,80));
+                                bitmap = cacheList.get(mPosition).getMomentPicturesList().get(i);
                                 holder.momentImagesList.get(i)
                                         .setImageBitmap(bitmap);
-                                MyLog.printLog(MyLog.LEVEL_D,"path " + i + " = " + pathString[i]);
+//                                Picasso.with(mContext).load("file:"+pathString[i]).into(holder.momentImagesList.get(i));
+//                                MyLog.printLog(MyLog.LEVEL_D,"path " + i + " = " + pathString[i]);
                             }
 
                         }catch (Exception e){
@@ -230,8 +247,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
                     }
                 }
 
-                MyLog.printLog(MyLog.LEVEL_D,"list size = "
-                        + list.get(mPosition).toString());
+//                MyLog.printLog(MyLog.LEVEL_D,"list size = "
+//                        + list.get(mPosition).toString());
 
             }
 //            return;
@@ -260,6 +277,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     }
 
     public void setList(List<MyMoment> dataList) {
+        for (MyMoment tempMoment:dataList) {
+            MyMomentRecyclerCache momentCache = tempMoment.toMymomentRecyclerCache(mContext);
+            cacheList.add(momentCache);
+        }
         this.list = dataList;
         notifyDataSetChanged();
     }

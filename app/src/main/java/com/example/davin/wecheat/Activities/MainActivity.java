@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,7 +16,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,6 +41,7 @@ import com.example.davin.wecheat.Utils.TranslationTools;
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -72,9 +76,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initToolBar();
         initMyRecyclerView();
 
-        
+        try {
+            TranslationTools.SaveImages(null,"balabala");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Connector.getDatabase();
-
+        getExternalCacheDir();
 
     }
 
@@ -83,6 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
         }
     }
 
@@ -111,9 +124,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int resourceId = resources.getIdentifier(
                     "navigation_bar_height","dimen","android");
             int height = resources.getDimensionPixelSize(resourceId);
-            Log.d("naviheight","navigation height == " + height);
+//            Log.d("naviheight","navigation height == " + height);
         }else {
-            Log.d("naviheight","has no navigation !");
+//            Log.d("naviheight","has no navigation !");
         }
     }
     
@@ -152,23 +165,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         String header_user_headpic = MySharepreferencesUtils.with(this).getUserHeadPicUri();
         if (header_user_headpic.length() > 2 && headerUserHeadpic != null){
-            Bitmap bitmap = BitmapFactory.decodeFile(header_user_headpic,
-                    new BitmapFactory.Options());
-            MyLog.printLog(MyLog.LEVEL_D,"user portrait size = " + bitmap.getByteCount());
-            int borderLength = TranslationTools.dip2px(this,80);
-            Bitmap sbit = Bitmap.createScaledBitmap(bitmap,borderLength,borderLength,true);
-            bitmap.recycle();
-            MyLog.printLog(MyLog.LEVEL_D,"user portrait scaled size = " + sbit.getByteCount());
-            headerUserHeadpic.setImageBitmap(sbit);
+            Bitmap bitmap = TranslationTools.SimplerCompressionPackge(
+                    header_user_headpic,
+                    TranslationTools.dip2px(this,80),
+                    TranslationTools.dip2px(this,80));
+//            MyLog.printLog(MyLog.LEVEL_D,"user portrait size = " + bitmap.getByteCount());
+//            int borderLength = TranslationTools.dip2px(this,80);
+//            Bitmap sbit = Bitmap.createScaledBitmap(bitmap,borderLength,borderLength,true);
+//            bitmap.recycle();
+//            MyLog.printLog(MyLog.LEVEL_D,"user portrait scaled size = " + bitmap.getByteCount());
+            headerUserHeadpic.setImageBitmap(bitmap);
         }
 
 
         String header_user_headbg = MySharepreferencesUtils.with(this).getUserHeadBgPath();
         if (header_user_headbg.length()> 2 && headerBackground!= null){
-            Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getRealSize(size);
+
+//            MyLog.printLog(MyLog.LEVEL_D,"realsize width " + size.x +"\n" +
+//                    "realsize height "+size.y);
+
+            Bitmap bitmapBg = TranslationTools.SimplerCompressionPackge(
+                    header_user_headbg,size.x,TranslationTools.px2dip(this,340));
+
+//            Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
 //            图片使用前需要压缩，不然会导致卡顿
-            MyLog.printLog(MyLog.LEVEL_D,"BG image size = " + bitmapBg.getByteCount()/1024/1024 + " M \n" +
-                    " image width = " + bitmapBg.getWidth() + " ; image height = " + bitmapBg.getHeight());
+//            MyLog.printLog(MyLog.LEVEL_D,"BG image size = " + bitmapBg.getByteCount()/1024/1024 + " M \n" +
+//                    " image width = " + bitmapBg.getWidth() + " ; image height = " + bitmapBg.getHeight());
 
             headerBackground.setImageBitmap(bitmapBg);
         }
@@ -180,11 +205,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (mAdapter != null){
 
-           momentsList = DataSupport//.where("id > ?","-1")
-                    .order("id desc")
-                    .find(MyMoment.class);
-           mAdapter.setList(momentsList);
-           mAdapter.notifyDataSetChanged();
+            momentsList = DataSupport//.where("id > ?","-1")
+                .order("id desc")
+                .find(MyMoment.class);
+            mAdapter.setList(momentsList);
+//            mAdapter.notifyDataSetChanged();
 
 
         }

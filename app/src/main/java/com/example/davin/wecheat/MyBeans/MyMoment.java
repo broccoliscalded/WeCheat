@@ -1,5 +1,10 @@
 package com.example.davin.wecheat.MyBeans;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.example.davin.wecheat.Utils.TranslationTools;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
@@ -97,5 +102,33 @@ public class MyMoment extends DataSupport implements Serializable{
                 ", isMyOwnMoment=" + isMyOwnMoment +
                 ", favoriteNames='" + favoriteNames + '\'' +
                 '}';
+    }
+
+    public MyMomentRecyclerCache toMymomentRecyclerCache(Context context){
+        MyMomentRecyclerCache momentCache = new MyMomentRecyclerCache();
+        momentCache.setFavoriteNames(getFavoriteNames());
+        momentCache.setGoodsTimes(getGoodsTimes());
+        String[] tempPathArray = getMomentPicturesPath().split(";");
+        List<Bitmap> tempImagesList = new ArrayList<>();
+        for (String path: tempPathArray) {
+            Bitmap bitmap = TranslationTools.SimplerCompressionPackge(
+                    path,
+                    TranslationTools.dip2px(context,80),
+                    TranslationTools.dip2px(context,80));
+            tempImagesList.add(bitmap);
+        }
+        momentCache.setMomentPicturesList(tempImagesList);
+        momentCache.setMomentTextContent(getMomentTextContent());
+        Bitmap bitmapPortrait = TranslationTools.SimplerCompressionPackge(
+                getMomentUserPortraitPath(),
+                TranslationTools.dip2px(context,40),
+                TranslationTools.dip2px(context,40));
+        momentCache.setMomentUserPortrait(bitmapPortrait);
+        momentCache.setMonmentCreatedTime(getMonmentCreatedTime());
+
+        momentCache.setNickName(getNickName());
+
+        momentCache.setMyOwnMoment(isMyOwnMoment());
+        return momentCache;
     }
 }

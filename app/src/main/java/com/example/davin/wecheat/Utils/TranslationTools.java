@@ -6,9 +6,15 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -103,16 +109,44 @@ public class TranslationTools {
      * @time 18-2-6 下午5:19
      * 
      */
-    public Bitmap SimplerCompressionPackge(String imagePath){
+    public static Bitmap SimplerCompressionPackge(String imagePath,int viewWidth,int viewHeight){
 
         BitmapFactory.Options options = new BitmapFactory.Options();
 //        options.inSampleSize = 2;
         options.inJustDecodeBounds = true;
 
+        BitmapFactory.decodeFile(imagePath,options);
+        MyLog.printLog(MyLog.LEVEL_D,"bitmap size :" + options.outWidth);
+        int scaleX = options.outWidth/viewWidth;
+        int scaleY = options.outHeight/viewHeight;
+        int realScale = Math.min(scaleX,scaleY);
+        BitmapFactory.Options realOption = new BitmapFactory.Options();
+        realOption.inJustDecodeBounds = false;
+        realOption.inSampleSize = realScale;
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath,realOption);
 
-//        BitmapFactory.decodeFile(imagePath,options);
-//        MyLog.printLog(MyLog.LEVEL_D,"bitmap size :" + bitmap.);
+        return bitmap;
+    }
 
-        return null;
+    /**
+     * 存储压缩图片到本地
+     * @author daniel
+     * @time 18-2-11 下午12:31
+     *
+     */
+    public static void SaveImages(Bitmap bitmap,String image_name) throws IOException {
+        String imagePath = Environment.getExternalStorageDirectory()+"WecheatImage";
+        File tempFile = new File(imagePath,image_name+".jpg");
+        if (tempFile.exists()){
+            tempFile.delete();
+        }
+        tempFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(tempFile);
+        if (bitmap != null){
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+            fos.flush();
+            fos.close();
+        }
+
     }
 }
