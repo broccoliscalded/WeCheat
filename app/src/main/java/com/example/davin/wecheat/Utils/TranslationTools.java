@@ -1,20 +1,26 @@
 package com.example.davin.wecheat.Utils;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.view.Display;
 
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -98,9 +104,8 @@ public class TranslationTools {
         Date currentTime = new Date(System.currentTimeMillis());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
                 "yyyy/MM/dd/hh/mm", Locale.getDefault());
-        String dateString = simpleDateFormat.format(currentTime);
 
-        return dateString;
+        return simpleDateFormat.format(currentTime);
     }
     
     /**
@@ -123,9 +128,8 @@ public class TranslationTools {
         BitmapFactory.Options realOption = new BitmapFactory.Options();
         realOption.inJustDecodeBounds = false;
         realOption.inSampleSize = realScale;
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath,realOption);
 
-        return bitmap;
+        return BitmapFactory.decodeFile(imagePath,realOption);
     }
 
     /**
@@ -134,19 +138,50 @@ public class TranslationTools {
      * @time 18-2-11 下午12:31
      *
      */
-    public static void SaveImages(Bitmap bitmap,String image_name) throws IOException {
-        String imagePath = Environment.getExternalStorageDirectory()+"WecheatImage";
-        File tempFile = new File(imagePath,image_name+".jpg");
-        if (tempFile.exists()){
-            tempFile.delete();
-        }
-        tempFile.createNewFile();
-        FileOutputStream fos = new FileOutputStream(tempFile);
-        if (bitmap != null){
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
-            fos.flush();
-            fos.close();
-        }
+    public static String SaveImages(Bitmap bitmap,String image_name) {
+        String imagePath = Environment.getExternalStorageDirectory()+File.separator+"WecheatImage";
+        MyLog.printLog(MyLog.LEVEL_D,"imagePath : " + imagePath);
+        File tempFile = new File(imagePath + File.separator,image_name+".jpg");
+        String imagefileName = tempFile.getAbsolutePath();
 
+        try {
+
+            tempFile.mkdirs();
+
+            if (tempFile.exists()){
+                tempFile.delete();
+            }
+//            tempFile.createNewFile();
+            OutputStream fos = new FileOutputStream(tempFile);
+            if (bitmap != null){
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+                fos.flush();
+                fos.close();
+            }
+
+            return tempFile.getAbsolutePath();
+        }catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+        return "";
+
+    }
+
+    public static String getSaveImageParentPath(){
+        return Environment.getExternalStorageDirectory()+File.separator+"WecheatImage";
+    }
+
+    public static String getPictureCName(String path){
+        String[] nameArray = path.split("/");
+        String tempName = nameArray[nameArray.length-1];
+        int lastIndex = tempName.lastIndexOf(".");
+        tempName = tempName.substring(0,lastIndex);
+
+       /* MyLog.printLog(MyLog.LEVEL_D,"last index : " + lastIndex +"\n" +
+                "string length :" + tempName.length()+"\n" +
+                "tempname : " + tempName);*/
+
+
+        return tempName;
     }
 }

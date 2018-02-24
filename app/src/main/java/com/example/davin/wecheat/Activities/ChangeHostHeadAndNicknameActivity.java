@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
@@ -20,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,9 +76,8 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
                                            @NonNull int[] grantResults) {
         switch (requestCode){
             case 1:
-                if (grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                if (!(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)){
 
-                }else {
                     Toast.makeText(this,"Read Storage Permission Denied",
                             Toast.LENGTH_SHORT).show();
                     finish();
@@ -86,10 +88,10 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
     }
 
     private void initView() {
-        nicknameEditText = (EditText) findViewById(R.id.edit_text_user_nickname);
-        userHeadPicImageView = (ImageView) findViewById(R.id.imageView_change);
-        buttonConfirm = (Button) findViewById(R.id.button_confirm);
-        userHeaderBackgroundImageView = (ImageView) findViewById(R.id.imageView_header_background);
+        nicknameEditText = findViewById(R.id.edit_text_user_nickname);
+        userHeadPicImageView = findViewById(R.id.imageView_change);
+        buttonConfirm = findViewById(R.id.button_confirm);
+        userHeaderBackgroundImageView = findViewById(R.id.imageView_header_background);
 
         userHeadPicImageView.setOnClickListener(this);
         buttonConfirm.setOnClickListener(this);
@@ -147,29 +149,67 @@ public class ChangeHostHeadAndNicknameActivity extends AppCompatActivity impleme
         if (resultCode == Activity.RESULT_OK){
             switch (requestCode){
                 case CHOOSE_FROM_ALBUM:
-                    MyLog.printLog(MyLog.LEVEL_D,"data content : "+data.toString());
+//                    MyLog.printLog(MyLog.LEVEL_D,"data content : "+data.toString());
                     Uri uri = data.getData();
                     String realPath = TranslationTools.getImageAbsolutePath(this,uri);// deprecated function
-                    MyLog.printLog(MyLog.LEVEL_D,"realpath : " + realPath);
-                    MySharepreferencesUtils.with(this).setUserHeadPicUri(realPath);
+
+                    String userPortraitName = TranslationTools.getPictureCName(realPath);
+
+                    Bitmap compressedPortraitBitmap = TranslationTools.SimplerCompressionPackge(
+                            realPath,
+                            TranslationTools.dip2px(this,80),
+                            TranslationTools.dip2px(this,80));
+                    String savedCompressedPortraitPath = TranslationTools.SaveImages(
+                            compressedPortraitBitmap,
+                            userPortraitName);
+
+
+                    MySharepreferencesUtils
+                            .with(this)
+                            .setUserHeadPicUri(savedCompressedPortraitPath);
 
                     Picasso
                         .with(this)
-                        .load(uri)
+                        .load("file:"+savedCompressedPortraitPath)
+                        .centerCrop()
                         .into(userHeadPicImageView);
                     break;
                 case CHOOSE_USER_HEAD_BACKGROUND:
+//                  add user portrait background to wecheatimage folder
                     Uri uri_bg = data.getData();
                     String realPathBg = TranslationTools.getImageAbsolutePath(this,uri_bg);
-                    MySharepreferencesUtils.with(this).setUserHeadBgPath(realPathBg);
-                    Picasso.with(this)
-                            .load(uri_bg)
-                            .into(userHeaderBackgroundImageView);
+
+                    String tempCIBname = TranslationTools.getPictureCName(realPathBg);
+
+                    Bitmap tempBitmap = TranslationTools.SimplerCompressionPackge(
+                            realPathBg,getScreenWidth(),getScreenHeight());
+
+                    userHeaderBackgroundImageView.setImageBitmap(tempBitmap);
+
+                    String savedImageBGPath = TranslationTools.SaveImages(tempBitmap,tempCIBname);
+                    MySharepreferencesUtils.with(this).setUserHeadBgPath(savedImageBGPath);
+
+
                     break;
             }
         }
     }
 
+    private int getScreenWidth(){
+        return getScreenPoint().x;
+    }
+
+    private int getScreenHeight(){
+        return getScreenPoint().y;
+    }
+
+    private Point getScreenPoint(){
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+
+        return size;
+    }
 
     private File getUriFromPath(String realPath) {
         File file = new File(realPath);

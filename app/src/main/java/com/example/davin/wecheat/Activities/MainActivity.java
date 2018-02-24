@@ -37,6 +37,7 @@ import com.example.davin.wecheat.Utils.MyLog;
 import com.example.davin.wecheat.Utils.MySharepreferencesUtils;
 import com.example.davin.wecheat.Utils.ToastUtil;
 import com.example.davin.wecheat.Utils.TranslationTools;
+import com.squareup.picasso.Picasso;
 
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
@@ -76,11 +77,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initToolBar();
         initMyRecyclerView();
 
-        try {
+        /*try {
             TranslationTools.SaveImages(null,"balabala");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+//        TranslationTools.SaveImages(null,"balabala");
         Connector.getDatabase();
         getExternalCacheDir();
 
@@ -93,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
         }
 
-        if (ContextCompat.checkSelfPermission(this,
+        /*if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
-        }
+        }*/
     }
 
     @Override
@@ -105,9 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode ){
             case 2:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//do nothing when u have got the permission
-                }else {
+                if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
 //u must got the {Manifest.permission.WRITE_EXTERNAL_STORAGE},otherwise any user action may cause crash
                     ActivityCompat.requestPermissions(MainActivity.this,new String[]{
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
@@ -125,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "navigation_bar_height","dimen","android");
             int height = resources.getDimensionPixelSize(resourceId);
 //            Log.d("naviheight","navigation height == " + height);
-        }else {
-//            Log.d("naviheight","has no navigation !");
         }
     }
     
@@ -165,37 +163,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         String header_user_headpic = MySharepreferencesUtils.with(this).getUserHeadPicUri();
         if (header_user_headpic.length() > 2 && headerUserHeadpic != null){
-            Bitmap bitmap = TranslationTools.SimplerCompressionPackge(
-                    header_user_headpic,
-                    TranslationTools.dip2px(this,80),
-                    TranslationTools.dip2px(this,80));
-//            MyLog.printLog(MyLog.LEVEL_D,"user portrait size = " + bitmap.getByteCount());
-//            int borderLength = TranslationTools.dip2px(this,80);
-//            Bitmap sbit = Bitmap.createScaledBitmap(bitmap,borderLength,borderLength,true);
-//            bitmap.recycle();
-//            MyLog.printLog(MyLog.LEVEL_D,"user portrait scaled size = " + bitmap.getByteCount());
-            headerUserHeadpic.setImageBitmap(bitmap);
+            Picasso.with(this)
+                    .load("file:"+header_user_headpic)
+//                    .centerCrop()
+                    .into(headerUserHeadpic);
+
+//            headerUserHeadpic.setImageBitmap(bitmap);
         }
 
 
         String header_user_headbg = MySharepreferencesUtils.with(this).getUserHeadBgPath();
         if (header_user_headbg.length()> 2 && headerBackground!= null){
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getRealSize(size);
 
-//            MyLog.printLog(MyLog.LEVEL_D,"realsize width " + size.x +"\n" +
-//                    "realsize height "+size.y);
-
-            Bitmap bitmapBg = TranslationTools.SimplerCompressionPackge(
-                    header_user_headbg,size.x,TranslationTools.px2dip(this,340));
-
-//            Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
-//            图片使用前需要压缩，不然会导致卡顿
-//            MyLog.printLog(MyLog.LEVEL_D,"BG image size = " + bitmapBg.getByteCount()/1024/1024 + " M \n" +
-//                    " image width = " + bitmapBg.getWidth() + " ; image height = " + bitmapBg.getHeight());
+            Bitmap bitmapBg = BitmapFactory.decodeFile(header_user_headbg);
 
             headerBackground.setImageBitmap(bitmapBg);
+
         }
         if (!MySharepreferencesUtils.with(this).getUserName().isEmpty() &&
                 MySharepreferencesUtils.with(this).getUserName() != null &&
